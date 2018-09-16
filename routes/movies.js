@@ -10,29 +10,24 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  
-        console.log('body', req.body)
-        const { error } = validate(req.body); 
-        if (error) return res.status(400).send(error.details[0].message);
+  const { error } = validate(req.body); 
+  if (error) return res.status(400).send(error.details[0].message);
 
-        const genre = await Genre.findById(req.body.genreId);
-        console.log('achou genre: ', genre)
-        if (!genre) return res.status(400).send('Invalid genre.');
-      
-        let movie = new Movie({ 
-          title: req.body.title,
-          genre: {
-            _id: genre._id,
-            name: genre.name
-          },
-          numberInStock: req.body.numberInStock,
-          dailyRentalRate: req.body.dailyRentalRate
-        });
-        movie = await movie.save();
-        
-        res.send(movie);
-    
+  const genre = await Genre.findById(req.body.genreId);
+  if (!genre) return res.status(400).send('Invalid genre.');
+
+  let movie = new Movie({ 
+    title: req.body.title,
+    genre: {
+      _id: genre._id,
+      name: genre.name
+    },
+    numberInStock: req.body.numberInStock,
+    dailyRentalRate: req.body.dailyRentalRate
+  });
+  movie = await movie.save();
   
+  res.send(movie);
 });
 
 router.put('/:id', async (req, res) => {
