@@ -8,6 +8,7 @@ const router = express.Router();
 
 
 router.get('/', async (req, res, next) => {
+ //  throw new Error('Estudos');
   const genres = await Genre.find().sort('name');
   res.send(genres);
 });
