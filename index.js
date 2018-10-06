@@ -1,4 +1,5 @@
- const config = require('config');
+const error = require('./middleware/error');
+const config = require('config');
 const Joi = require('joi');
 Joi.objectId = require('joi-objectid')(Joi);
 const mongoose = require('mongoose');
@@ -28,6 +29,7 @@ mongoose.connect('mongodb://localhost/vidly')
   app.use('/api/rentals', rentals);
   app.use('/api/users', users);
   app.use('/api/auth', auth);   
+  app.use(error);
   
 
 const port = process.env.PORT || 3000;
