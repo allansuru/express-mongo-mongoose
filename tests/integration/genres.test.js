@@ -1,5 +1,6 @@
 const request = require('supertest');
-const { Genre } = require('../../models/genre.js')
+const { Genre } = require('../../models/genre');
+const mongoose = require('mongoose');
 let server;
 
 describe('/api/genres', () => {
@@ -11,10 +12,11 @@ describe('/api/genres', () => {
 
     describe('GET /', () => {
         it('should return all genres', async () => {
-            await Genre.collection.insertMany([
+            const genres = [
                 { name: 'genre1' },
-                { name: 'genre2' }
-            ]);
+                { name: 'genre2' },
+              ];
+            await Genre.collection.insertMany(genres);
 
            const res = await request(server).get('/api/genres');
            expect(res.status).toBe(200);
@@ -29,10 +31,17 @@ describe('/api/genres', () => {
             const genre = new Genre({ name: 'genre1' });
             await genre.save();
 
-            const res = await request(server).get(`/api/genres/${genre._id}`);
-
+      
+            const res = await request(server).get('/api/genres/' + genre._id);
+      
             expect(res.status).toBe(200);
-            expect(res.body).toHaveProperty('name', genre.name);
-        });
+            expect(res.body).toHaveProperty('name', genre.name);     
+          });
+      
+          it('should return 404 if invalid id is passed', async () => {
+            const res = await request(server).get('/api/genres/1');
+      
+            expect(res.status).toBe(404);
+          });
     });
 });
