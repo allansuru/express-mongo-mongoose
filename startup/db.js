@@ -10,3 +10,5 @@ mongoose.connect(conn)
 
 // development
 // test
+
+// set NODE_ENV development
